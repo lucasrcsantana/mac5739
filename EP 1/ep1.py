@@ -34,20 +34,20 @@ import util
 ############################################################
 # Part 1: Segmentation problem under a unigram model
 
+
 class SegmentationProblem(util.Problem):
     def __init__(self, query: str, unigramCost: object):
         self.query = query
         self.unigramCost = unigramCost
 
-    def isState(self, state: Tuple[str, List[str]]) -> bool:
+    def isState(self, state: Tuple[str, str]) -> bool:
         """ Metodo que implementa verificacao de estado """
-        
-        if type(state) == tuple and type(state[0]) == str and type(state[1]) == list:
+        if type(state) == tuple and type(state[0]) == str and type(state[1]) == str:
             return True
         else:
             return False
 
-    def initialState(self, query: str) -> Tuple[str, List[str]]:
+    def initialState(self, query: str) -> Tuple[str, str]:
         """ Metodo que implementa retorno da posicao inicial
 
         Args:
@@ -59,12 +59,12 @@ class SegmentationProblem(util.Problem):
         """
         # raise NotImplementedError
 
-        initial_state = (query, [])
+        initial_state = (query, str())
 
         return initial_state
 
 
-    def actions(self, state: Tuple[str, List[str]]) -> List[Tuple[str, str]]:
+    def actions(self, state: Tuple[str, str]) -> List[Tuple[str, str]]:
         """ Metodo que implementa retorno da lista de acoes validas
         para um determinado estado
 
@@ -86,46 +86,58 @@ class SegmentationProblem(util.Problem):
 
         word = state[0]
         possible_states = []
+        print(f'ACTUAL STATE {state[1]}')
 
         for index in range(0, len(word)):
-            left_word = word[index+1 : ]
-            right_word = word[ : index+1]
-            possible_states.append((left_word, right_word))
-        
+
+            # left_word = word[index+1: ]
+            # right_word = word[: index+1]
+            # possible_states.append((left_word, right_word))
+
+            right_word = word[-index-1: ]
+            left_word = word[:-index-1]
+
+            # left_word = word[index+1: ]
+            # right_word = word[: index+1]
+
+            if state[1] == '':
+                _word = [right_word]
+            else:
+                _word = [state[1]] + [right_word]
+            _word = ' '.join(_word)
+            possible_states.append((left_word, _word))
+
+
         return possible_states
 
-    def nextState(self, state: Tuple[str, List[str]], action: Tuple[str, str]) -> Tuple[str, List[str]]:
+    def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
-
-        # print(state)
-        # print(action)
-
-        _w = state[1] + [action[1]]
+        # print(f' ACTION 1 {[action[1]]}')
+        _w = action[1]
 
         next_state = (action[0], _w)
 
         return next_state
 
-    def isGoalState(self, state: Tuple[str, List[str]]) -> bool:
+    def isGoalState(self, state: Tuple[str, str]) -> bool:
         """ Metodo que implementa teste de meta """
-        
         if state[0] == '':
             return True
         else:
             return False
 
-
-    def stepCost(self, state: Tuple[str, List[str]], action: object) -> List[float]:
+    def stepCost(self, state: Tuple[str, str], action: object) -> List[float]:
         """ Metodo que implementa funcao custo """
-                
-        left_cost = action(state[0])
-        right_cost = action(state[1])
-
-        step_cost = left_cost + right_cost
-
+        # left_cost = action(state[0])
+        # right_cost = action(state[1])
+        # print(f'RIGHT COST {right_cost}')
+        # step_cost = left_cost + right_cost
+        
+        # print(f'STEP COST STATE {state}')
+        actual_state_cost = action(state[0])
+        past_states_cost = sum([action(x) for x in state[1].split()])
+        step_cost = past_states_cost
         return step_cost
-
-
 
 def segmentWords(query, unigramCost):
 
@@ -144,19 +156,22 @@ def segmentWords(query, unigramCost):
         print(f'INITIAL STATE {state}')
 
         while not sp.isGoalState(state=state):
-            if sp.isState:
+            if sp.isState(state=state):
                 possible_states = sp.actions(state=state)
-                costs = [ sp.stepCost(state=x, action=unigramCost) for x in possible_states ]
+                # print('POSSIBLE STATES')
+                # print(possible_states)
+                costs = [sp.stepCost(state=x, action=unigramCost) for x in possible_states]
                 # print(f'STEP COST {costs}')
                 index_min_cost = costs.index(min(costs))
                 # print(f'Min Cost: {index_min_cost}')
                 state = sp.nextState(state=state, action=possible_states[index_min_cost])
                 print(f'NEXT STATE {state}')
-                goal_state = sp.isGoalState(state=state)
-                print('#####################')
             else:
                 return 'Não é estado'
-        result_segment = ' '.join(state[1])
+        result_segment = ' '.join(reversed(state[1].split()))
+        print('##### RESULT SEGMENT #####')
+        print(result_segment)
+        print('##### RESULT SEGMENT #####\n')
         return result_segment
 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
@@ -170,6 +185,7 @@ def segmentWords(query, unigramCost):
 
 ############################################################
 # Part 2: Vowel insertion problem under a bigram cost
+
 
 class VowelInsertionProblem(util.Problem):
     def __init__(self, queryWords, bigramCost, possibleFills):
@@ -221,7 +237,7 @@ def getRealCosts(corpus='corpus.txt'):
     
     _realUnigramCost, _realBigramCost, _possibleFills = None, None, None
     if _realUnigramCost is None:
-        print('Training language cost functions [corpus: '+ corpus+']... ')
+        print('Training language cost functions [corpus: ' + corpus + ']... ')
         
         _realUnigramCost, _realBigramCost = util.makeLanguageModels(corpus)
         _possibleFills = util.makeInverseRemovalDictionary(corpus, 'aeiou')
@@ -242,9 +258,8 @@ def main():
     resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
     print(resulSegment)
     
-
-    resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
-    print(resultInsert)
+    # resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
+    # print(resultInsert)
 
 if __name__ == '__main__':
     main()
