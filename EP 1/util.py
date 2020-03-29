@@ -260,6 +260,6 @@ def makeInverseRemovalDictionary(path, removeChars):
 
     def possibleFills(short):
         return wordsRemovedToFull.get(short, set())
-
+    
     return possibleFills
 
