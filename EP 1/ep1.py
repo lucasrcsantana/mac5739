@@ -1,3 +1,5 @@
+from typing import Tuple, List
+
 """
   AO PREENCHER ESSE CABECALHO COM O MEU NOME E O MEU NUMERO USP,
   DECLARO QUE SOU A UNICA PESSOA AUTORA E RESPONSAVEL POR ESSE PROGRAMA.
@@ -40,9 +42,16 @@ class SegmentationProblem(util.Problem):
 
     def isState(self, state):
         """ Metodo que implementa verificacao de estado """
-        raise NotImplementedError
+        
+        if type(state) == tuple:
+            return "Estado válido"
 
-    def initialState(self, query: str) -> str:
+        else:
+            return "Estado inválido"
+
+        # raise NotImplementedError
+
+    def initialState(self, query: str) -> Tuple[str, List[str]]:
         """ Metodo que implementa retorno da posicao inicial
 
         Args:
@@ -50,29 +59,72 @@ class SegmentationProblem(util.Problem):
                 Query inicial do problema
 
         Returns
-            query: str 
+            initial_state: tuple 
         """
         # raise NotImplementedError
 
-        return self.query
+        initial_state = (query, [])
 
-    def actions(self, state):
+        return initial_state
+
+
+    def actions(self, state: Tuple[str, List[str]]) -> List[Tuple[str, str]]:
         """ Metodo que implementa retorno da lista de acoes validas
         para um determinado estado
+
+        A acao possível é separar a palavra do estado em duas, fazendo
+        todas as possibilidades de separação.
+
+        Args:
+            state: tuple
+                Estado atual. ex: ('beliebeinyourself', '')
+        
+        Returns:
+            possible_states: list
+                Possíveis estados da palavra separada
+                Ex: [
+                        ('elieveinyourselfhavefaithinyourabilities', 'b'), 
+                        ('lieveinyourselfhavefaithinyourabilities', 'be')
+                    ]
         """
-        raise NotImplementedError
+
+        word = state[0]
+        possible_states = []
+
+        for index in range(0, len(word)):
+            left_word = word[index+1 : ]
+            right_word = word[ : index+1]
+            possible_states.append((left_word, right_word))
+        
+        return possible_states
 
     def nextState(self, state, action):
         """ Metodo que implementa funcao de transicao """
-        raise NotImplementedError
 
-    def isGoalState(self, state):
+        print(state)
+        print(action)
+        print(state[1].append(action[1]))
+        
+        next_state = (action[0], state[1].append(action[1]))
+
+        # raise NotImplementedError
+
+        return next_state
+
+    def isGoalState(self, state: Tuple[str, List[str]]) -> bool:
         """ Metodo que implementa teste de meta """
         raise NotImplementedError
 
-    def stepCost(self, state, action):
+    def stepCost(self, state: Tuple[str, List[str]], action: object) -> List[float]:
         """ Metodo que implementa funcao custo """
-        raise NotImplementedError
+                
+        left_cost = action(state[0])
+        right_cost = action(state[1])
+
+        step_cost = left_cost + right_cost
+
+        return step_cost
+
 
 
 def segmentWords(query, unigramCost):
@@ -81,39 +133,40 @@ def segmentWords(query, unigramCost):
         return ''
 
     else:
-        left_word = []
-        right_word = []
-        goal_state = []
+        sp = SegmentationProblem(
+                                query=query, 
+                                unigramCost=unigramCost
+                                )
         
-        for i in range(0, len(query)):
-            left_word.append(query[:i+1])
-            right_word.append(query[i+1:])
+        state = sp.initialState(query=query)
 
-        left_word_costs = [ unigramCost(x) for x in left_word ]
-        right_word_costs = [ unigramCost(x) for x in right_word ]
+        print(f'Initial State {state}')
 
-        print(left_word_costs)
-        print(right_word_costs)
+        possible_states = sp.actions(state=state)
 
-        total_costs = [ x + y for x,y, in zip(left_word_costs, right_word_costs)]
+        print(possible_states)        
+        
+        costs = [ sp.stepCost(x, unigramCost) for x in possible_states ]
+        
+        print(f'STEP COST {costs}')
 
-        index_min_cost = total_costs.index(min(total_costs))
+        index_min_cost = costs.index(min(costs))
 
         print(f'Min Cost: {index_min_cost}')
 
-        goal_state.append(left_word[index_min_cost])
-        print(goal_state)
+        state = sp.nextState(state, possible_states[index_min_cost])
 
-
+        print(f'NEXT STATE {state}')
 
         
 
-     
     # BEGIN_YOUR_CODE 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
-    # valid,solution  = util.getSolution(goalNode,problem)
+        # valid, solution  = util.getSolution(
+        #                                     problem = 'believeinyourselfhavefaithinyourabilities'
+        #                                     )
 
-    raise NotImplementedError
+    #raise NotImplementedError
 
     # END_YOUR_CODE
 
@@ -188,8 +241,8 @@ def main():
     """
     unigramCost, bigramCost, possibleFills  =  getRealCosts()
     
-    # resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
-    resulSegment = segmentWords('yourabilities', unigramCost)
+    resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
+    #resulSegment = segmentWords('yourabilities', unigramCost)
     print(resulSegment)
     
 
