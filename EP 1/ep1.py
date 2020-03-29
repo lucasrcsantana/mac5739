@@ -57,8 +57,6 @@ class SegmentationProblem(util.Problem):
         Returns
             initial_state: tuple 
         """
-        # raise NotImplementedError
-
         initial_state = (query, str())
 
         return initial_state
@@ -86,19 +84,10 @@ class SegmentationProblem(util.Problem):
 
         word = state[0]
         possible_states = []
-        print(f'ACTUAL STATE {state[1]}')
 
         for index in range(0, len(word)):
-
-            # left_word = word[index+1: ]
-            # right_word = word[: index+1]
-            # possible_states.append((left_word, right_word))
-
             right_word = word[-index-1: ]
             left_word = word[:-index-1]
-
-            # left_word = word[index+1: ]
-            # right_word = word[: index+1]
 
             if state[1] == '':
                 _word = [right_word]
@@ -107,15 +96,11 @@ class SegmentationProblem(util.Problem):
             _word = ' '.join(_word)
             possible_states.append((left_word, _word))
 
-
         return possible_states
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
-        # print(f' ACTION 1 {[action[1]]}')
-        _w = action[1]
-
-        next_state = (action[0], _w)
+        next_state = (action[0], action[1])
 
         return next_state
 
@@ -128,15 +113,10 @@ class SegmentationProblem(util.Problem):
 
     def stepCost(self, state: Tuple[str, str], action: object) -> List[float]:
         """ Metodo que implementa funcao custo """
-        # left_cost = action(state[0])
-        # right_cost = action(state[1])
-        # print(f'RIGHT COST {right_cost}')
-        # step_cost = left_cost + right_cost
-        
-        # print(f'STEP COST STATE {state}')
-        actual_state_cost = action(state[0])
-        past_states_cost = sum([action(x) for x in state[1].split()])
-        step_cost = past_states_cost
+        residual_state_cost = action(state[0])
+        state_cost = sum([action(x) for x in state[1].split()])
+        step_cost = state_cost
+
         return step_cost
 
 def segmentWords(query, unigramCost):
@@ -158,20 +138,15 @@ def segmentWords(query, unigramCost):
         while not sp.isGoalState(state=state):
             if sp.isState(state=state):
                 possible_states = sp.actions(state=state)
-                # print('POSSIBLE STATES')
-                # print(possible_states)
                 costs = [sp.stepCost(state=x, action=unigramCost) for x in possible_states]
-                # print(f'STEP COST {costs}')
                 index_min_cost = costs.index(min(costs))
-                # print(f'Min Cost: {index_min_cost}')
                 state = sp.nextState(state=state, action=possible_states[index_min_cost])
-                print(f'NEXT STATE {state}')
             else:
                 return 'Não é estado'
         result_segment = ' '.join(reversed(state[1].split()))
         print('##### RESULT SEGMENT #####')
         print(result_segment)
-        print('##### RESULT SEGMENT #####\n')
+        print('\n')
         return result_segment
 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
