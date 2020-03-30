@@ -111,7 +111,7 @@ class SegmentationProblem(util.Problem):
         else:
             return False
 
-    def stepCost(self, state: Tuple[str, str], action: object) -> List[float]:
+    def stepCost(self, state: Tuple[str, str], action: object) -> float:
         """ Metodo que implementa funcao custo """
         residual_state_cost = action(state[0])
         state_cost = sum([action(x) for x in state[1].split()])
@@ -168,18 +168,20 @@ class VowelInsertionProblem(util.Problem):
         self.bigramCost = bigramCost
         self.possibleFills = possibleFills
 
-    def isState(self, state: Tuple[str, str]):
+    def isState(self, state: Tuple[str, str]) -> bool:
         """ Metodo  que implementa verificacao de estado """
-        raise NotImplementedError
+        if type(state) == tuple and type(state[0]) == str and type(state[1]) == str:
+            return True
+        else:
+            return False
 
     def initialState(self: object) -> Tuple[str, str]:
         """ Metodo  que implementa retorno da posicao inicial """
-
         initial_state = (' '.join(self.queryWords), str())
 
         return initial_state
 
-    def actions(self, state: Tuple[str, str]):
+    def actions(self, state: Tuple[str, str]) -> List[Tuple[str, str]]:
         """ Metodo  que implementa retorno da lista de acoes validas
         para um determinado estado
         """
@@ -196,31 +198,37 @@ class VowelInsertionProblem(util.Problem):
                     possible_actions.append((_f, _s))
         else:
             first_element = self.possibleFills(words[0])
-            possible_actions.append((list(first_element)[0], list(first_element)[0]))
-
+            if first_element:
+                possible_actions.append((list(first_element)[0], list(first_element)[0]))
+            else:
+                possible_actions.append((str(), str()))
         
-        print(possible_actions)
         return possible_actions
 
-    def nextState(self, state: Tuple[str, str], action: Tuple[str, str]):
+    def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> List[Tuple[str, str]]:
         """ Metodo que implementa funcao de transicao """
-
-        if state[1] == '':
-            fixed_phrase = action[0]
-        else:
-            fixed_phrase = state[1] + ' ' + action[0]
-            #fixed_phrase = ' '.join(fixed_phrase)
         
         broken_phrase = state[0].split()
-        broken_phrase.pop(0)
-
-        broken_phrase = ' '.join(broken_phrase)
-
-        next_state = (broken_phrase, fixed_phrase)
+        fixed_phrase = state[1]
         
+        if action[0] or action[1]:
+            if len(broken_phrase) == 2:
+                fixed_phrase = state[1] + ' ' + action[0] + ' ' + action[1]
+                broken_phrase.pop(0)
+                broken_phrase.pop(0)
+            
+            else:
+                fixed_phrase = fixed_phrase + ' ' + action[0]        
+                broken_phrase.pop(0)
+
+            broken_phrase = ' '.join(broken_phrase)
+            next_state = (broken_phrase, fixed_phrase)
+        
+        else:
+            next_state = (str(), state[0])
+
         return next_state
         
-        # raise NotImplementedError
 
     def isGoalState(self, state: Tuple[str, str]):
         """ Metodo que implementa teste de meta """
@@ -229,9 +237,8 @@ class VowelInsertionProblem(util.Problem):
         else:
             return False
 
-    def stepCost(self, state: Tuple[str, str], action):
+    def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
-
         cost = self.bigramCost(action[0], action[1])
         
         return cost
@@ -251,14 +258,22 @@ def insertVowels(queryWords, bigramCost, possibleFills):
     print(f'Initial State {state}')
 
     while not vip.isGoalState(state=state):
-        possible_actions = vip.actions(state=state)
-        costs = [vip.stepCost(state=state, action=x) for x in possible_actions]
-        index_min_cost = costs.index(min(costs))
-        print(index_min_cost)
-        state = vip.nextState(state=state, action=possible_actions[index_min_cost])
-        print(state)
+        if vip.isState:
+            possible_actions = vip.actions(state=state)
+            # print(f'POSSIBLE ACTIONS {possible_actions}')
+            if possible_actions:
+                costs = [vip.stepCost(state=state, action=x) for x in possible_actions]
+                index_min_cost = costs.index(min(costs))
+                # print(index_min_cost)
+                state = vip.nextState(state=state, action=possible_actions[index_min_cost])
+                # print(f'NEXT STATE {state}')
+            else:
+                state = vip.nextState(state=state, action=state)
+            # print(state)
 
-    result_insert = state[1]
+    result_insert = state[1].split()
+    result_insert = ' '.join(result_insert)
+    print(result_insert)
     return result_insert
 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
@@ -293,8 +308,8 @@ def main():
     """
     unigramCost, bigramCost, possibleFills  =  getRealCosts()
     
-    # resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
-    # print(resulSegment)
+    resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
+    print(resulSegment)
     
     resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
     print(resultInsert)
