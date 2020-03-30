@@ -57,7 +57,7 @@ class SegmentationProblem(util.Problem):
         Returns
             initial_state: tuple 
         """
-        initial_state = (self.query, str())
+        initial_state = (self.query.lower(), str())
 
         return initial_state
 
@@ -177,7 +177,7 @@ class VowelInsertionProblem(util.Problem):
 
     def initialState(self: object) -> Tuple[str, str]:
         """ Metodo  que implementa retorno da posicao inicial """
-        initial_state = (' '.join(self.queryWords), str())
+        initial_state = (' '.join(self.queryWords).lower(), str())
 
         return initial_state
 
