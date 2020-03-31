@@ -116,9 +116,9 @@ class SegmentationProblem(util.Problem):
 
     def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
-        residual_state_cost = self.unigramCost(action[0])
-        state_cost = sum([self.unigramCost(x) for x in action[1].split()])
-        step_cost = state_cost
+        state_cost = sum([self.unigramCost(x) for x in state[1].split()])
+        action_cost = sum([self.unigramCost(x) for x in action[1].split()])
+        step_cost = action_cost - state_cost
 
         return step_cost
 
@@ -184,7 +184,7 @@ class VowelInsertionProblem(util.Problem):
 
     def initialState(self: object) -> Tuple[str, str]:
         """ Metodo  que implementa retorno da posicao inicial """
-        queryWords = unidecode.unidecode(' '.join(self.queryWords.split()).lower())
+        queryWords = unidecode.unidecode(' '.join(self.queryWords).lower())
 
         initial_state = (queryWords, str())
 
@@ -248,9 +248,12 @@ class VowelInsertionProblem(util.Problem):
 
     def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
-        cost = self.bigramCost(action[0], action[1])
+        state_cost = self.bigramCost(state[0], state[1])
+        action_cost = self.bigramCost(action[0], action[1])
+
+        step_cost = action_cost - state_cost
         
-        return cost
+        return step_cost
 
 
 
@@ -317,11 +320,29 @@ def main():
     """
     unigramCost, bigramCost, possibleFills  =  getRealCosts()
     
+    print('### TESTING MAIN FUNCTIONS ###')
     resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
     print(resulSegment)
     
-    resultInsert = insertVowels('smtms ltr bcms nvr', bigramCost, possibleFills)
+    resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
     print(resultInsert)
+
+    print('\n### TESTING uniformCostSearch Function """')
+
+    seg_problem = SegmentationProblem(query='believeinyourselfhavefaithinyourabilities', unigramCost=unigramCost)
+    goal_seg_node = util.uniformCostSearch(seg_problem)
+    print(goal_seg_node)
+    # util.getSolution(node=goal_seg_node, problem=seg_problem)
+
+    vowel_problem = VowelInsertionProblem(
+        queryWords='m p', 
+        bigramCost=bigramCost, 
+        possibleFills=possibleFills
+    )
+    goal_vowel_node = util.uniformCostSearch(vowel_problem)
+    print(goal_vowel_node)
+    # util.getSolution(node=goal_vowel_node, problem=vowel_problem)
+
 
 if __name__ == '__main__':
     main()
