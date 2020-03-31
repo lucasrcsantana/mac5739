@@ -30,6 +30,7 @@
 
 from typing import Tuple, List
 import util
+import unidecode
 
 ############################################################
 # Part 1: Segmentation problem under a unigram model
@@ -45,6 +46,7 @@ class SegmentationProblem(util.Problem):
         if type(state) == tuple and type(state[0]) == str and type(state[1]) == str:
             return True
         else:
+            print('Não é um estado válido')
             return False
 
     def initialState(self) -> Tuple[str, str]:
@@ -57,7 +59,8 @@ class SegmentationProblem(util.Problem):
         Returns
             initial_state: tuple 
         """
-        initial_state = (self.query.lower(), str())
+        query = unidecode.unidecode(self.query.lower())
+        initial_state = (query, str())
 
         return initial_state
 
@@ -74,7 +77,7 @@ class SegmentationProblem(util.Problem):
                 Estado atual. ex: ('beliebeinyourself', '')
         
         Returns:
-            possible_states: list
+            possible_actions: list(tuple)
                 Possíveis estados da palavra separada
                 Ex: [
                         ('elieveinyourselfhavefaithinyourabilities', 'b'), 
@@ -83,7 +86,7 @@ class SegmentationProblem(util.Problem):
         """
 
         word = state[0]
-        possible_states = []
+        possible_actions = []
 
         for index in range(0, len(word)):
             right_word = word[-index-1: ]
@@ -94,9 +97,9 @@ class SegmentationProblem(util.Problem):
             else:
                 _word = [state[1]] + [right_word]
             _word = ' '.join(_word)
-            possible_states.append((left_word, _word))
+            possible_actions.append((left_word, _word))
 
-        return possible_states
+        return possible_actions
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
@@ -111,10 +114,10 @@ class SegmentationProblem(util.Problem):
         else:
             return False
 
-    def stepCost(self, state: Tuple[str, str], action: object) -> float:
+    def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
-        residual_state_cost = action(state[0])
-        state_cost = sum([action(x) for x in state[1].split()])
+        residual_state_cost = self.unigramCost(action[0])
+        state_cost = sum([self.unigramCost(x) for x in action[1].split()])
         step_cost = state_cost
 
         return step_cost
@@ -137,12 +140,15 @@ def segmentWords(query, unigramCost):
 
         while not sp.isGoalState(state=state):
             if sp.isState(state=state):
-                possible_states = sp.actions(state=state)
-                costs = [sp.stepCost(state=x, action=unigramCost) for x in possible_states]
-                index_min_cost = costs.index(min(costs))
-                state = sp.nextState(state=state, action=possible_states[index_min_cost])
-            else:
-                return 'Não é estado'
+                possible_actions = sp.actions(state=state)
+                if possible_actions:
+                    costs = [sp.stepCost(state=state, action=x) for x in possible_actions]
+                    index_min_cost = costs.index(min(costs))
+                    state = sp.nextState(state=state, action=possible_actions[index_min_cost])
+                else:
+                    state = sp.nextState(state=state, action=state)
+
+        print(f'FINAL STATE {state}')
         result_segment = ' '.join(reversed(state[1].split()))
         print('##### RESULT SEGMENT #####')
         print(result_segment)
@@ -173,11 +179,14 @@ class VowelInsertionProblem(util.Problem):
         if type(state) == tuple and type(state[0]) == str and type(state[1]) == str:
             return True
         else:
+            print('Estado não é válido')
             return False
 
     def initialState(self: object) -> Tuple[str, str]:
         """ Metodo  que implementa retorno da posicao inicial """
-        initial_state = (' '.join(self.queryWords).lower(), str())
+        queryWords = unidecode.unidecode(' '.join(self.queryWords.split()).lower())
+
+        initial_state = (queryWords, str())
 
         return initial_state
 
@@ -271,9 +280,9 @@ def insertVowels(queryWords, bigramCost, possibleFills):
                 state = vip.nextState(state=state, action=state)
             # print(state)
 
+    print(f'FINAL STATE {state}')
     result_insert = state[1].split()
     result_insert = ' '.join(result_insert)
-    print(result_insert)
     return result_insert
 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
@@ -311,7 +320,7 @@ def main():
     resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
     print(resulSegment)
     
-    resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
+    resultInsert = insertVowels('smtms ltr bcms nvr', bigramCost, possibleFills)
     print(resultInsert)
 
 if __name__ == '__main__':
