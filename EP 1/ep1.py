@@ -43,7 +43,7 @@ class SegmentationProblem(util.Problem):
 
     def isState(self, state: Tuple[str, str]) -> bool:
         """ Metodo que implementa verificacao de estado """
-        if type(state) == tuple and type(state[0]) == str and type(state[1]) == str:
+        if type(state) == str:
             return True
         else:
             print('Não é um estado válido')
@@ -62,11 +62,8 @@ class SegmentationProblem(util.Problem):
             initial_state: tuple 
         """
         query = unidecode.unidecode(self.query.lower())
-        initial_state = (query, str())
-        
-        # initial_state = [query]
 
-        return initial_state
+        return query
 
 
     def actions(self, state: Tuple[str, str]) -> List[Tuple[str, str]]:
@@ -81,47 +78,31 @@ class SegmentationProblem(util.Problem):
                 Estado atual. ex: ('beliebeinyourself', '')
         
         Returns:
-            possible_actions: list(tuple)
+            actions: list(tuple)
                 Possíveis estados da palavra separada
                 Ex: [
                         ('elieveinyourselfhavefaithinyourabilities', 'b'), 
                         ('lieveinyourselfhavefaithinyourabilities', 'be')
                     ]
         """
-        actual_state = state
+        state = state.split()
         word = state[0]
-        possible_actions = []
-
+        actions = []
+        
         for index in range(0, len(word)):
+            action = state.copy()
             right_word = word[-index-1: ]
             left_word = word[:-index-1]
-
-            if state[1] == '':
-                _word = [right_word]
-            else:
-                _word = [state[1]] + [right_word]
-            _word = ' '.join(_word)
-            possible_actions.append((left_word, _word))
-        
-        return possible_actions
-
-        # word = state[0]
-        # possible_actions = []
-        
-        # for index in range(0, len(word)):
-        #     action = state.copy()
-        #     right_word = word[-index-1: ]
-        #     left_word = word[:-index-1]
             
-        #     action[0] = left_word
-        #     action.append(right_word)
-        #     possible_actions.append(action)
-
-        # return possible_actions
+            action[0] = left_word
+            action.append(right_word)
+            actions.append(' '.join(action))
+        
+        return actions
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
-        next_state = (action[0], action[1])
+        next_state = action
         # next_state = action
 
         return next_state
@@ -133,15 +114,19 @@ class SegmentationProblem(util.Problem):
         else:
             return False
 
+        # if ''.join(reversed(state.split())) == self.query:
+        #     return True
+        # else:
+        #     False
+
     def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
         # state_cost = sum([self.unigramCost(x) for x in state])
         # action_cost = sum([self.unigramCost(x) for x in action])
 
-        state_cost = sum([self.unigramCost(x) for x in state[1].split()])
-        action_cost = sum([self.unigramCost(x) for x in action[1].split()])
-        step_cost = action_cost - state_cost
-
+        state_cost = sum([self.unigramCost(x) for x in state.split()])
+        action_cost = sum([self.unigramCost(x) for x in action.split()])
+        step_cost = action_cost
         return step_cost
 
 def segmentWords(query, unigramCost):
@@ -158,33 +143,12 @@ def segmentWords(query, unigramCost):
                                 )
 
         goal_sp_node = util.uniformCostSearch(sp)
-        result_segment = ' '.join(reversed(goal_sp_node.state[1].split()))
+        result_segment = ' '.join(reversed(goal_sp_node.state.split()))
         
         # valid, solution  = util.getSolution(goal_sp_node, sp)
         # print(valid, solution)
         
         return result_segment
-
-        
-        # state = sp.initialState()
-        # print(f'INITIAL STATE {state}')
-
-        # while not sp.isGoalState(state=state):
-        #     if sp.isState(state=state):
-        #         possible_actions = sp.actions(state=state)
-        #         if possible_actions:
-        #             costs = [sp.stepCost(state=state, action=x) for x in possible_actions]
-        #             index_min_cost = costs.index(min(costs))
-        #             state = sp.nextState(state=state, action=possible_actions[index_min_cost])
-        #         else:
-        #             state = sp.nextState(state=state, action=state)
-
-        # print(f'FINAL STATE {state}')
-        # result_segment = ' '.join(reversed(state[1].split()))
-        # print('##### RESULT SEGMENT #####')
-        # print(result_segment)
-        # print('\n')
-        # return result_segment
 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
         # valid, solution  = util.getSolution(
@@ -227,7 +191,7 @@ class VowelInsertionProblem(util.Problem):
         """
         old_phrase = state[0]
         words = old_phrase.split()
-        possible_actions = []
+        actions = []
 
         if len(words) > 1:
             first_element = self.possibleFills(words[0])
@@ -235,15 +199,15 @@ class VowelInsertionProblem(util.Problem):
 
             for _f in first_element:
                 for _s in second_element:
-                    possible_actions.append((_f, _s))
+                    actions.append((_f, _s))
         else:
             first_element = self.possibleFills(words[0])
             if first_element:
-                possible_actions.append((list(first_element)[0], list(first_element)[0]))
+                actions.append((list(first_element)[0], list(first_element)[0]))
             else:
-                possible_actions.append((str(), str()))
+                actions.append((str(), str()))
         
-        return possible_actions
+        return actions
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> List[Tuple[str, str]]:
         """ Metodo que implementa funcao de transicao """
@@ -306,28 +270,6 @@ def insertVowels(queryWords, bigramCost, possibleFills):
     # print(valid, solution)
 
     return result_insert
-    
-    # state = vip.initialState()
-    # print(f'Initial State {state}')
-
-    # while not vip.isGoalState(state=state):
-    #     if vip.isState:
-    #         possible_actions = vip.actions(state=state)
-    #         # print(f'POSSIBLE ACTIONS {possible_actions}')
-    #         if possible_actions:
-    #             costs = [vip.stepCost(state=state, action=x) for x in possible_actions]
-    #             index_min_cost = costs.index(min(costs))
-    #             # print(index_min_cost)
-    #             state = vip.nextState(state=state, action=possible_actions[index_min_cost])
-    #             # print(f'NEXT STATE {state}')
-    #         else:
-    #             state = vip.nextState(state=state, action=state)
-    #         # print(state)
-
-    # print(f'FINAL STATE {state}')
-    # result_insert = state[1].split()
-    # result_insert = ' '.join(result_insert)
-    # return result_insert
 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
     # valid, solution  = util.getSolution(goal_vowel_node, vip)
@@ -368,26 +310,6 @@ def main():
     
     resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
     print(resultInsert)
-
-    print('\n### TESTING uniformCostSearch Function """')
-
-    # seg_problem = SegmentationProblem(
-    #     query='believeinyourselfhavefaithinyourabilities', 
-    #     unigramCost=unigramCost
-    #     )
-    # goal_seg_node = util.uniformCostSearch(seg_problem)
-    # print(goal_seg_node)
-    # util.getSolution(node=goal_seg_node, problem=seg_problem)
-
-    # vowel_problem = VowelInsertionProblem(
-    #     queryWords='hv mr', 
-    #     bigramCost=bigramCost, 
-    #     possibleFills=possibleFills
-    #     )
-    # goal_vowel_node = util.uniformCostSearch(vowel_problem)
-    # print(goal_vowel_node)
-    # util.getSolution(node=goal_vowel_node, problem=vowel_problem)
-
 
 if __name__ == '__main__':
     main()
