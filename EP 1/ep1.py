@@ -134,26 +134,35 @@ def segmentWords(query, unigramCost):
                                 query=query, 
                                 unigramCost=unigramCost
                                 )
+
+        goal_sp_node = util.uniformCostSearch(sp)
+        result_segment = ' '.join(reversed(goal_sp_node.state[1].split()))
         
-        state = sp.initialState()
-        print(f'INITIAL STATE {state}')
-
-        while not sp.isGoalState(state=state):
-            if sp.isState(state=state):
-                possible_actions = sp.actions(state=state)
-                if possible_actions:
-                    costs = [sp.stepCost(state=state, action=x) for x in possible_actions]
-                    index_min_cost = costs.index(min(costs))
-                    state = sp.nextState(state=state, action=possible_actions[index_min_cost])
-                else:
-                    state = sp.nextState(state=state, action=state)
-
-        print(f'FINAL STATE {state}')
-        result_segment = ' '.join(reversed(state[1].split()))
-        print('##### RESULT SEGMENT #####')
-        print(result_segment)
-        print('\n')
+        # valid, solution  = util.getSolution(goal_sp_node, sp)
+        # print(valid, solution)
+        
         return result_segment
+
+        
+        # state = sp.initialState()
+        # print(f'INITIAL STATE {state}')
+
+        # while not sp.isGoalState(state=state):
+        #     if sp.isState(state=state):
+        #         possible_actions = sp.actions(state=state)
+        #         if possible_actions:
+        #             costs = [sp.stepCost(state=state, action=x) for x in possible_actions]
+        #             index_min_cost = costs.index(min(costs))
+        #             state = sp.nextState(state=state, action=possible_actions[index_min_cost])
+        #         else:
+        #             state = sp.nextState(state=state, action=state)
+
+        # print(f'FINAL STATE {state}')
+        # result_segment = ' '.join(reversed(state[1].split()))
+        # print('##### RESULT SEGMENT #####')
+        # print(result_segment)
+        # print('\n')
+        # return result_segment
 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
         # valid, solution  = util.getSolution(
@@ -248,10 +257,10 @@ class VowelInsertionProblem(util.Problem):
 
     def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
-        state_cost = self.bigramCost(state[0], state[1])
+        # state_cost = self.bigramCost(state[0], state[1])
         action_cost = self.bigramCost(action[0], action[1])
 
-        step_cost = action_cost - state_cost
+        step_cost = action_cost
         
         return step_cost
 
@@ -265,31 +274,42 @@ def insertVowels(queryWords, bigramCost, possibleFills):
                                 bigramCost=bigramCost, 
                                 possibleFills=possibleFills
                                 )
-    
-    state = vip.initialState()
-    print(f'Initial State {state}')
 
-    while not vip.isGoalState(state=state):
-        if vip.isState:
-            possible_actions = vip.actions(state=state)
-            # print(f'POSSIBLE ACTIONS {possible_actions}')
-            if possible_actions:
-                costs = [vip.stepCost(state=state, action=x) for x in possible_actions]
-                index_min_cost = costs.index(min(costs))
-                # print(index_min_cost)
-                state = vip.nextState(state=state, action=possible_actions[index_min_cost])
-                # print(f'NEXT STATE {state}')
-            else:
-                state = vip.nextState(state=state, action=state)
-            # print(state)
+    goal_vowel_node = util.uniformCostSearch(vip)
 
-    print(f'FINAL STATE {state}')
-    result_insert = state[1].split()
+    result_insert = goal_vowel_node.state[1].split()
     result_insert = ' '.join(result_insert)
+    
+    # valid, solution  = util.getSolution(goal_vowel_node, vip)
+    # print(valid, solution)
+
     return result_insert
+    
+    # state = vip.initialState()
+    # print(f'Initial State {state}')
+
+    # while not vip.isGoalState(state=state):
+    #     if vip.isState:
+    #         possible_actions = vip.actions(state=state)
+    #         # print(f'POSSIBLE ACTIONS {possible_actions}')
+    #         if possible_actions:
+    #             costs = [vip.stepCost(state=state, action=x) for x in possible_actions]
+    #             index_min_cost = costs.index(min(costs))
+    #             # print(index_min_cost)
+    #             state = vip.nextState(state=state, action=possible_actions[index_min_cost])
+    #             # print(f'NEXT STATE {state}')
+    #         else:
+    #             state = vip.nextState(state=state, action=state)
+    #         # print(state)
+
+    # print(f'FINAL STATE {state}')
+    # result_insert = state[1].split()
+    # result_insert = ' '.join(result_insert)
+    # return result_insert
 
     # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
-    # valid,solution  = util.getSolution(goalNode,problem)
+    # valid, solution  = util.getSolution(goal_vowel_node, vip)
+    # print(valid, solution)
     #raise NotImplementedError
     # END_YOUR_CODE
 
@@ -329,18 +349,21 @@ def main():
 
     print('\n### TESTING uniformCostSearch Function """')
 
-    seg_problem = SegmentationProblem(query='believeinyourselfhavefaithinyourabilities', unigramCost=unigramCost)
-    goal_seg_node = util.uniformCostSearch(seg_problem)
-    print(goal_seg_node)
+    # seg_problem = SegmentationProblem(
+    #     query='believeinyourselfhavefaithinyourabilities', 
+    #     unigramCost=unigramCost
+    #     )
+    # goal_seg_node = util.uniformCostSearch(seg_problem)
+    # print(goal_seg_node)
     # util.getSolution(node=goal_seg_node, problem=seg_problem)
 
-    vowel_problem = VowelInsertionProblem(
-        queryWords='m p', 
-        bigramCost=bigramCost, 
-        possibleFills=possibleFills
-    )
-    goal_vowel_node = util.uniformCostSearch(vowel_problem)
-    print(goal_vowel_node)
+    # vowel_problem = VowelInsertionProblem(
+    #     queryWords='hv mr', 
+    #     bigramCost=bigramCost, 
+    #     possibleFills=possibleFills
+    #     )
+    # goal_vowel_node = util.uniformCostSearch(vowel_problem)
+    # print(goal_vowel_node)
     # util.getSolution(node=goal_vowel_node, problem=vowel_problem)
 
 
