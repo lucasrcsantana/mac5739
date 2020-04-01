@@ -48,6 +48,8 @@ class SegmentationProblem(util.Problem):
         else:
             print('Não é um estado válido')
             return False
+        
+        # return True
 
     def initialState(self) -> Tuple[str, str]:
         """ Metodo que implementa retorno da posicao inicial
@@ -61,6 +63,8 @@ class SegmentationProblem(util.Problem):
         """
         query = unidecode.unidecode(self.query.lower())
         initial_state = (query, str())
+        
+        # initial_state = [query]
 
         return initial_state
 
@@ -84,7 +88,7 @@ class SegmentationProblem(util.Problem):
                         ('lieveinyourselfhavefaithinyourabilities', 'be')
                     ]
         """
-
+        actual_state = state
         word = state[0]
         possible_actions = []
 
@@ -98,12 +102,27 @@ class SegmentationProblem(util.Problem):
                 _word = [state[1]] + [right_word]
             _word = ' '.join(_word)
             possible_actions.append((left_word, _word))
-
+        
         return possible_actions
+
+        # word = state[0]
+        # possible_actions = []
+        
+        # for index in range(0, len(word)):
+        #     action = state.copy()
+        #     right_word = word[-index-1: ]
+        #     left_word = word[:-index-1]
+            
+        #     action[0] = left_word
+        #     action.append(right_word)
+        #     possible_actions.append(action)
+
+        # return possible_actions
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
         next_state = (action[0], action[1])
+        # next_state = action
 
         return next_state
 
@@ -116,6 +135,9 @@ class SegmentationProblem(util.Problem):
 
     def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
+        # state_cost = sum([self.unigramCost(x) for x in state])
+        # action_cost = sum([self.unigramCost(x) for x in action])
+
         state_cost = sum([self.unigramCost(x) for x in state[1].split()])
         action_cost = sum([self.unigramCost(x) for x in action[1].split()])
         step_cost = action_cost - state_cost
@@ -191,7 +213,7 @@ class VowelInsertionProblem(util.Problem):
             print('Estado não é válido')
             return False
 
-    def initialState(self: object) -> Tuple[str, str]:
+    def initialState(self) -> Tuple[str, str]:
         """ Metodo  que implementa retorno da posicao inicial """
         queryWords = unidecode.unidecode(' '.join(self.queryWords).lower())
 
