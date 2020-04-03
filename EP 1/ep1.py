@@ -98,27 +98,37 @@ class SegmentationProblem(util.Problem):
             action.append(right_word)
             actions.append(' '.join(action))
         
-        print(actions)
         return actions
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
+        
         next_state = action
+        print(f' NEXT STATE {next_state}')
         # next_state = action
 
         return next_state
 
     def isGoalState(self, state: Tuple[str, str]) -> bool:
         """ Metodo que implementa teste de meta """
-        # if (state[0] == ''):
+        # if (state[0] == ' '):
         #     return True
         # else:
         #     return False
 
+        # print(f'GOAL STATE {state}')
         if ( state != self.initialState() ) and (''.join(reversed(state.split())) == self.initialState()):
+            print(f' GOAL STATE {state}')
             return True
         else:
             return False
+
+        # if (state[0] == ' ') and ( state != self.initialState() ) and (''.join((state.split())) == self.initialState()):
+        #     print(f' GOAL STATE {state}')
+        #     return True
+        # else:
+        #     return False
+
 
     def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
@@ -128,7 +138,10 @@ class SegmentationProblem(util.Problem):
         state_cost = sum([self.unigramCost(x) for x in state.split()])
         action_cost = sum([self.unigramCost(x) for x in action.split()])
         step_cost = action_cost - state_cost
+        
+        print(action)
         print(step_cost)
+        
         return step_cost
 
 def segmentWords(query, unigramCost):
@@ -145,6 +158,7 @@ def segmentWords(query, unigramCost):
                                 )
 
         goal_sp_node = util.uniformCostSearch(sp)
+        print(f'GOAL STATE {goal_sp_node.state}')
         result_segment = ' '.join(reversed(goal_sp_node.state.split()))
         
         # valid, solution  = util.getSolution(goal_sp_node, sp)
