@@ -91,20 +91,27 @@ class SegmentationProblem(util.Problem):
         
         for index in range(0, len(word)):
             action = state.copy()
-            right_word = word[-index-1: ]
-            left_word = word[:-index-1]
+            left_word = word[index+1: ]
+            right_word = word[:index+1]
             
             action[0] = left_word
             action.append(right_word)
             actions.append(' '.join(action))
-        
+        print(f'\n{actions}')
         return actions
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
         
-        next_state = action
-        print(f' NEXT STATE {next_state}')
+        if self.stepCost(state=state, action=action)  != 0:
+            next_state = action
+        else:
+            next_state = state
+
+        # print(f'LAST STATE {state}')
+        # print(f'NEXT STATE {action}') 
+        # next_state = action
+        # next_state = action
         # next_state = action
 
         return next_state
@@ -117,17 +124,19 @@ class SegmentationProblem(util.Problem):
         #     return False
 
         # print(f'GOAL STATE {state}')
-        if ( state != self.initialState() ) and (''.join(reversed(state.split())) == self.initialState()):
-            print(f' GOAL STATE {state}')
-            return True
-        else:
-            return False
-
-        # if (state[0] == ' ') and ( state != self.initialState() ) and (''.join((state.split())) == self.initialState()):
+        # if ( state != self.initialState() ) and (''.join(reversed(state.split())) == self.initialState()):
         #     print(f' GOAL STATE {state}')
         #     return True
         # else:
         #     return False
+
+        
+
+        if ( state != self.initialState() ) and (''.join((state.split())) == self.query):
+            # print(f' GOAL STATE {state}')
+            return True
+        else:
+            return False
 
 
     def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
@@ -139,8 +148,8 @@ class SegmentationProblem(util.Problem):
         action_cost = sum([self.unigramCost(x) for x in action.split()])
         step_cost = action_cost - state_cost
         
-        print(action)
-        print(step_cost)
+        # print(f'ACTION {action}')
+        # print(f'STEP COST {step_cost}')
         
         return step_cost
 
@@ -158,6 +167,7 @@ def segmentWords(query, unigramCost):
                                 )
 
         goal_sp_node = util.uniformCostSearch(sp)
+        print('PROBLEM RESOLVED')
         print(f'GOAL STATE {goal_sp_node.state}')
         result_segment = ' '.join(reversed(goal_sp_node.state.split()))
         
@@ -277,7 +287,6 @@ def insertVowels(queryWords, bigramCost, possibleFills):
                                 )
 
     goal_vowel_node = util.uniformCostSearch(vip)
-
     result_insert = goal_vowel_node.state[1].split()
     result_insert = ' '.join(result_insert)
     
@@ -323,8 +332,8 @@ def main():
     resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
     print(resulSegment)
     
-    resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
-    print(resultInsert)
+    # resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
+    # print(resultInsert)
 
 if __name__ == '__main__':
     main()

@@ -163,7 +163,9 @@ def getSolution(node, problem):
         steps.append(node.action)
         node = new_n
     if node is not None and node.action is not None :
+        print(f'STEPS {node.action}')
         steps.append(node.action)
+        
     return (True,  ' '.join(list(reversed(steps))))
 
 
