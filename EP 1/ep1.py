@@ -105,24 +105,9 @@ class SegmentationProblem(util.Problem):
         
         return possible_actions
 
-        # word = state[0]
-        # possible_actions = []
-        
-        # for index in range(0, len(word)):
-        #     action = state.copy()
-        #     right_word = word[-index-1: ]
-        #     left_word = word[:-index-1]
-            
-        #     action[0] = left_word
-        #     action.append(right_word)
-        #     possible_actions.append(action)
-
-        # return possible_actions
-
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
         next_state = (action[0], action[1])
-        # next_state = action
 
         return next_state
 
@@ -135,9 +120,6 @@ class SegmentationProblem(util.Problem):
 
     def stepCost(self, state: Tuple[str, str], action: Tuple[str, str]) -> float:
         """ Metodo que implementa funcao custo """
-        # state_cost = sum([self.unigramCost(x) for x in state])
-        # action_cost = sum([self.unigramCost(x) for x in action])
-
         state_cost = sum([self.unigramCost(x) for x in state[1].split()])
         action_cost = sum([self.unigramCost(x) for x in action[1].split()])
         step_cost = action_cost - state_cost
@@ -314,25 +296,6 @@ def main():
     
     resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
     print(resultInsert)
-
-    print('\n### TESTING uniformCostSearch Function """')
-
-    # seg_problem = SegmentationProblem(
-    #     query='believeinyourselfhavefaithinyourabilities', 
-    #     unigramCost=unigramCost
-    #     )
-    # goal_seg_node = util.uniformCostSearch(seg_problem)
-    # print(goal_seg_node)
-    # util.getSolution(node=goal_seg_node, problem=seg_problem)
-
-    # vowel_problem = VowelInsertionProblem(
-    #     queryWords='hv mr', 
-    #     bigramCost=bigramCost, 
-    #     possibleFills=possibleFills
-    #     )
-    # goal_vowel_node = util.uniformCostSearch(vowel_problem)
-    # print(goal_vowel_node)
-    # util.getSolution(node=goal_vowel_node, problem=vowel_problem)
 
 
 if __name__ == '__main__':
