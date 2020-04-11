@@ -81,7 +81,7 @@ class SegmentationProblem(util.Problem):
                 Estado atual. ex: ('beliebeinyourself', '')
         
         Returns:
-            possible_actions: list(tuple)
+            actions: list(tuple)
                 Possíveis estados da palavra separada
                 Ex: [
                         ('elieveinyourselfhavefaithinyourabilities', 'b'), 
@@ -90,7 +90,7 @@ class SegmentationProblem(util.Problem):
         """
         actual_state = state
         word = state[0]
-        possible_actions = []
+        actions = []
 
         for index in range(0, len(word)):
             right_word = word[-index-1: ]
@@ -101,9 +101,9 @@ class SegmentationProblem(util.Problem):
             else:
                 _word = [state[1]] + [right_word]
             _word = ' '.join(_word)
-            possible_actions.append((left_word, _word))
+            actions.append((left_word, _word))
         
-        return possible_actions
+        return actions
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> Tuple[str, str]:
         """ Metodo que implementa funcao de transicao """
@@ -169,8 +169,11 @@ class VowelInsertionProblem(util.Problem):
 
     def initialState(self) -> Tuple[str, str]:
         """ Metodo  que implementa retorno da posicao inicial """
-        queryWords = unidecode.unidecode(' '.join(self.queryWords).lower())
+        queryWords = [unidecode.unidecode(x).lower() for x in self.queryWords]
+        queryWords.insert(0, '-BEGIN-')
+        queryWords = ' '.join(queryWords)
 
+        # queryWords = ' '.join([unidecode.unidecode(x).lower() for x in self.queryWords])
         initial_state = (queryWords, str())
 
         return initial_state
@@ -181,52 +184,50 @@ class VowelInsertionProblem(util.Problem):
         """
         old_phrase = state[0]
         words = old_phrase.split()
-        possible_actions = []
+        actions = []
 
+        # first_fills = self.possibleFills(words[0])
         if len(words) > 1:
-            first_element = self.possibleFills(words[0])
-            second_element = self.possibleFills(words[1])
+            possible_fills = self.possibleFills(words[1])
 
-            for _f in first_element:
-                for _s in second_element:
-                    possible_actions.append((_f, _s))
-        else:
-            first_element = self.possibleFills(words[0])
-            if first_element:
-                possible_actions.append((list(first_element)[0], list(first_element)[0]))
+            if possible_fills:
+                actions = [(words[0], x) for x in possible_fills]
             else:
-                possible_actions.append((str(), str()))
-        
-        return possible_actions
+                actions.append((str(), words[1]))
+        else:
+            possible_fills = self.possibleFills(words[0])
+            actions = [(str(), x) for x in possible_fills]
+            
+        # print(actions)
+        return actions
 
     def nextState(self, state: Tuple[str, str], action: Tuple[str, str]) -> List[Tuple[str, str]]:
         """ Metodo que implementa funcao de transicao """
         
         broken_phrase = state[0].split()
         fixed_phrase = state[1]
-        
-        if action[0] or action[1]:
-            if len(broken_phrase) == 2:
-                fixed_phrase = state[1] + ' ' + action[0] + ' ' + action[1]
-                broken_phrase.pop(0)
-                broken_phrase.pop(0)
-            
-            else:
-                fixed_phrase = fixed_phrase + ' ' + action[0]        
-                broken_phrase.pop(0)
 
-            broken_phrase = ' '.join(broken_phrase)
-            next_state = (broken_phrase, fixed_phrase)
-        
+        if action[0]:
+            fixed_phrase = state[1] + ' ' + action[1]
+            
+            broken_phrase.pop(0)
+            broken_phrase.pop(0)
+            
+            if broken_phrase:
+                broken_phrase.insert(0, action[1])
+                broken_phrase = ' '.join(broken_phrase)
+                next_state = (broken_phrase, fixed_phrase)
+            else:
+                next_state = (str(), fixed_phrase)
         else:
-            next_state = (str(), state[0])
+            next_state = (str(), action[1])
 
         return next_state
         
 
     def isGoalState(self, state: Tuple[str, str]):
         """ Metodo que implementa teste de meta """
-        if state[0] == '':
+        if state[0] == '' or state[0] == '-BEGIN-':
             return True
         else:
             return False
@@ -290,11 +291,12 @@ def main():
     """
     unigramCost, bigramCost, possibleFills  =  getRealCosts()
     
-    print('### TESTING MAIN FUNCTIONS ###')
     resulSegment = segmentWords('believeinyourselfhavefaithinyourabilities', unigramCost)
     print(resulSegment)
     
     resultInsert = insertVowels('smtms ltr bcms nvr'.split(), bigramCost, possibleFills)
+    print(resultInsert)
+    resultInsert = insertVowels('wld lk t hv mr lttrs'.split(), bigramCost, possibleFills)
     print(resultInsert)
 
 
