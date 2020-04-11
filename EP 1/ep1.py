@@ -165,34 +165,6 @@ def segmentWords(query, unigramCost):
         
         return result_segment
 
-        
-        # state = sp.initialState()
-        # print(f'INITIAL STATE {state}')
-
-        # while not sp.isGoalState(state=state):
-        #     if sp.isState(state=state):
-        #         possible_actions = sp.actions(state=state)
-        #         if possible_actions:
-        #             costs = [sp.stepCost(state=state, action=x) for x in possible_actions]
-        #             index_min_cost = costs.index(min(costs))
-        #             state = sp.nextState(state=state, action=possible_actions[index_min_cost])
-        #         else:
-        #             state = sp.nextState(state=state, action=state)
-
-        # print(f'FINAL STATE {state}')
-        # result_segment = ' '.join(reversed(state[1].split()))
-        # print('##### RESULT SEGMENT #####')
-        # print(result_segment)
-        # print('\n')
-        # return result_segment
-
-    # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
-        # valid, solution  = util.getSolution(
-        #                                     problem = 'believeinyourselfhavefaithinyourabilities'
-        #                                     )
-
-    #raise NotImplementedError
-
     # END_YOUR_CODE
 
 ############################################################
@@ -306,33 +278,7 @@ def insertVowels(queryWords, bigramCost, possibleFills):
     # print(valid, solution)
 
     return result_insert
-    
-    # state = vip.initialState()
-    # print(f'Initial State {state}')
 
-    # while not vip.isGoalState(state=state):
-    #     if vip.isState:
-    #         possible_actions = vip.actions(state=state)
-    #         # print(f'POSSIBLE ACTIONS {possible_actions}')
-    #         if possible_actions:
-    #             costs = [vip.stepCost(state=state, action=x) for x in possible_actions]
-    #             index_min_cost = costs.index(min(costs))
-    #             # print(index_min_cost)
-    #             state = vip.nextState(state=state, action=possible_actions[index_min_cost])
-    #             # print(f'NEXT STATE {state}')
-    #         else:
-    #             state = vip.nextState(state=state, action=state)
-    #         # print(state)
-
-    # print(f'FINAL STATE {state}')
-    # result_insert = state[1].split()
-    # result_insert = ' '.join(result_insert)
-    # return result_insert
-
-    # Voce pode usar a função getSolution para recuperar a sua solução a partir do no meta
-    # valid, solution  = util.getSolution(goal_vowel_node, vip)
-    # print(valid, solution)
-    #raise NotImplementedError
     # END_YOUR_CODE
 
 ############################################################
