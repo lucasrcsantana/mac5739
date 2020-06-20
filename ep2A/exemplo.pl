@@ -1,0 +1,115 @@
+% Fatos
+gerou(kelly, maria).
+gerou(cleber, maria).
+gerou(cleber, bruna).
+gerou(maria, julia).
+gerou(maria, pedro).
+gerou(pedro, lucas).
+gerou(bruna, leticia).
+gerou(julia, marcos).
+gerou(leticia, mariana).
+gerou(joao, jose).
+gerou(joana, bruna).
+gerou(sergio, leticia).
+
+gerou(pedro, mariana).
+gerou(joao, monique).
+gerou(kelly, joao).
+
+filho(X, Y) :-
+    gerou(Y, X).
+
+irmao(X, Y):-
+    filho(X, Z),
+    filho(Y, Z),
+    X\=Y.
+
+avo(X, Z):-
+    gerou(X, Y),
+    gerou(Y, Z).
+
+neto(X, Z) :-
+    filho(X, Y),
+    filho(Y, Z).
+
+primo(X, Y):-
+    gerou(PX, X),
+    gerou(PY, Y),
+    irmao(PX, PY).
+
+tio(X, Y):-
+    gerou(Z, Y),
+    irmao(X, Z).
+
+
+lista_de_compras([banana, manga, limao, laranja]).
+lista_de_nomes([lucas, monique, sandra, neuza]).
+
+fatorial(0, 1).
+fatorial(N, F) :-
+    N > 0,
+    N1 is N - 1,
+    fatorial(N1, F1),
+    F is N* F1.
+
+concatenar([], L, L).
+concatenar([X|L1], L2, [X|L3]) :-
+    concatenar(L1, L2, L3).
+
+tamanho([], 0).
+tamanho([X|Y], N) :-
+    tamanho(Y, T),
+    N is T + 1.
+
+lista_de_vogais([a, e, i, o, u]).
+
+lista_para_conjunto([], _, []).
+lista_para_conjunto([X|T], Y, Z):-
+   \+  member(X, Y),
+    lista_para_conjunto(T, Y, Z).
+
+
+membro(X, Y) :-
+    Y = [X|_].
+membro(X, Y) :-
+    Y = [_|Z],
+    membro(X, Z).
+
+% base case
+set([], []).
+% here we say that if the head is in the tail of the list
+% we discard the head and create a set with the tail
+% the exclamation mark is a "cut" which means that if member(H, T) was true
+% prolog cannot backtrack from set([H|T], X) to set([H|T], [H|X]).
+% this prevents giving extra answers that aren't sets, try removing it.
+set([H|T], X):- member(H, T), !, set(T, X).
+% and here we say that if the previous clause didn't match because
+% head is not a member of tail then we create a set of the tail adding head.
+set([H|T], [H|X]):- set(T, X).
+
+
+uniao_conjunto([], L, L).
+uniao_conjunto([H|T], L2, X) :-
+    member(H, L2),
+    !,
+    uniao_conjunto(T, L2, X).
+uniao_conjunto([H|T], L2, [H|X]) :-
+    uniao_conjunto(T, L2, X).
+
+inter_conjunto([], _, []).
+inter_conjunto([H|T], L2, X) :-
+    \+ member(H, L2),
+    !,
+    inter_conjunto(T, L2, X).
+inter_conjunto([H|T], L2, [H|X]) :-
+    inter_conjunto(T, L2, X).
+
+
+
+diferenca_conjunto([], _, []).
+diferenca_conjunto([H|T], L2, X) :-
+    member(H, L2),
+    !,
+    diferenca_conjunto(T, L2, X).
+diferenca_conjunto([H|T], L2, [H|X]):-
+    diferenca_conjunto(T, L2, X).
