@@ -79,8 +79,53 @@ class BlackjackMDP(util.MDP):
         """
         Given a |state| it returns if the player already peeked.
         """
+        print('PEEKED') if state[1] is not None else 0
         return state[1] is not None
+    
+    def bankrupted(self, points):
+        print('BANKRUPTED') if points > self.limiar else False
+        return True if points > self.limiar else False
 
+    def get_next_points(self, state, card_index):
+        """
+        Return the points in the next hand
+        """
+        next_points = state[0] + self.valores_cartas[card_index]
+        return next_points
+
+    def get_next_deck(self, state, card_index):
+        """
+        Return the deck in the next hand
+        """
+        list_deck = list(state[2])
+        list_deck[card_index] -= 1
+        next_deck = tuple(list_deck) 
+        
+        if (self.bankrupted(self.get_next_points(state, card_index)))  or (sum(next_deck) == 0):
+            next_deck = None
+
+        return next_deck
+    
+    def get_card(self, state, card_index):
+        """
+        Get a card in top of card
+        """
+        new_state = (self.get_next_points(state, card_index), None, self.get_next_deck(state, card_index))
+        return new_state
+
+    def peek_card(self, state, card_index):
+        """
+        Peek a card in top of deck
+        """
+        new_state = (state[0], card_index, state[2])
+        return new_state
+   
+    def leave_game(self, state):
+        """
+        Leave the game
+        """
+        new_state = (state[0], state[1], None)
+        return new_state
 
     def succAndProbReward(self, state, action):
         """
@@ -100,62 +145,94 @@ class BlackjackMDP(util.MDP):
         action = action
         possible_states = []
 
-        if self.peeked(state):
-            if action == 'Espiar':
-                return []
-            else:
-                card_index = state[1]
-                list_deck = list(state[2])
-                list_deck[card_index] -= 1
-                next_deck = tuple(list_deck) 
+        # if self.peeked(state):
+        #     if action == 'Pegar':
+        #         card_index = state[1]
+        #         list_deck = list(state[2])
+        #         list_deck[card_index] -= 1
+        #         next_deck = tuple(list_deck) 
                 
-                new_state = (state[0] + self.valores_cartas[card_index], None, next_deck)
-                prob = 1
-                reward = 0
-                return [(new_state, prob, reward)]
-        else:
-            if action == 'Pegar':
-                for card_index in range(0, len(state[2])):
-                    list_deck = list(state[2])
-                    list_deck[card_index] -= 1
-                    next_deck = tuple(list_deck)
-                    reward = 0
+        #         new_state = (state[0] + self.valores_cartas[card_index], None, next_deck)
+        #         prob = 1
+        #         reward = 0
+        #         return [(new_state, prob, reward)]
+        # else:
+        #     if action == 'Pegar':
+        #         for card_index in range(0, len(state[2])):
+        #             list_deck = list(state[2])
+        #             list_deck[card_index] -= 1
+        #             next_deck = tuple(list_deck)
+        #             reward = 0
 
-                    next_points = state[0] + self.valores_cartas[card_index]
+        #             next_points = state[0] + self.valores_cartas[card_index]
 
-                    if next_points > self.limiar:
-                        next_deck = None
-                        reward = state[0]
-                    elif sum(next_deck) == 0:
-                        next_deck = None
-                        reward = state[0]
+        #             if (next_points > self.limiar) or (sum(next_deck) == 0):
+        #                 next_deck = None
+        #                 reward = next_points
 
-                    new_state = (next_points, None, next_deck)
-                    prob = state[2][card_index] / sum(state[2])
+        #             new_state = (next_points, None, next_deck)
+        #             prob = state[2][card_index] / sum(state[2])
                     
-                    possible_states.append((new_state, prob, reward))
-                print(possible_states)
-                return possible_states
+        #             possible_states.append((new_state, prob, reward))
+        #         print(possible_states)
+        #         return possible_states
 
-            if action == 'Espiar':
-                for card_index in range(0, len(state[2])):
-                    new_state = (state[0], card_index, state[2])
-                    prob = state[2][card_index] / sum(state[2])
-                    reward = -self.custo_espiada
+        #     if action == 'Espiar':
+        #         if self.peeked(state):
+        #             return []
+        #         else:
+        #             for card_index in range(0, len(state[2])):
+        #                 new_state = self.peek_card(state)
+        #                 prob = state[2][card_index] / sum(state[2])
+        #                 reward = -self.custo_espiada
+        #                 possible_states.append((new_state, prob, reward))
 
-                    possible_states.append((new_state, prob, reward))
+        #             print(possible_states)
+        #             return possible_states
 
-                print(possible_states)
-                return possible_states
-
-            if action == 'Sair':
-                new_state = (state[0], state[1], None)
-                prob = 1
-                reward = state[0]
-                return [(new_state, prob, reward)]
+        #     if action == 'Sair':
+        #         new_state = (state[0], state[1], None)
+        #         prob = 1
+        #         reward = state[0]
+        #         return [(new_state, prob, reward)]
         # raise Exception("Not implemented yet")
         # END_YOUR_CODE
-        
+        ############################################
+        ############################################
+
+        if action == 'Pegar':
+            if self.peeked(state):
+                card_index = state[1]
+                new_state = self.get_card(state, card_index)
+                prob = 1
+                reward = 0
+                possible_states.append((new_state, prob, reward))
+            else:
+                for card_index in range(0, len(state[2])):
+                    new_state = self.get_card(state, card_index)
+                    prob = state[2][card_index] / sum(state[2])
+                    reward = 0
+                    possible_states.append((new_state, prob, reward))
+
+        if action == 'Espiar':
+            if self.peeked(state):
+                possible_states = []
+            else:
+                for card_index in range(0, len(state[2])):
+                    new_state = self.peek_card(state, card_index)
+                    prob = state[2][card_index] / sum(state[2])
+                    reward = -self.custo_espiada
+                    possible_states.append((new_state, prob, reward))
+
+        if action == 'Sair':
+            new_state = self.leave_game(state)
+            prob = 1
+            reward = state[0]
+            possible_states.append((new_state, prob, reward))
+            
+        print(possible_states)
+        return possible_states    
+            
 
     def discount(self):
         """
