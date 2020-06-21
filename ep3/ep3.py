@@ -104,8 +104,12 @@ class BlackjackMDP(util.MDP):
             if action == 'Espiar':
                 return []
             else:
-                card_index = state[1] 
-                new_state = (state[0] + self.valores_cartas[card_index], None, state[2])
+                card_index = state[1]
+                list_deck = list(state[2])
+                list_deck[card_index] -= 1
+                next_deck = tuple(list_deck) 
+                
+                new_state = (state[0] + self.valores_cartas[card_index], None, next_deck)
                 prob = 1
                 reward = 0
                 return [(new_state, prob, reward)]
@@ -135,8 +139,6 @@ class BlackjackMDP(util.MDP):
 
             if action == 'Espiar':
                 for card_index in range(0, len(state[2])):
-                #card_index = random.randint(0, len(state[2]) - 1)
-
                     new_state = (state[0], card_index, state[2])
                     prob = state[2][card_index] / sum(state[2])
                     reward = -self.custo_espiada
@@ -145,7 +147,7 @@ class BlackjackMDP(util.MDP):
 
                 print(possible_states)
                 return possible_states
-                
+
             if action == 'Sair':
                 new_state = (state[0], state[1], None)
                 prob = 1
