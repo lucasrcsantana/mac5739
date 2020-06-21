@@ -83,7 +83,7 @@ class BlackjackMDP(util.MDP):
         return state[1] is not None
     
     def bankrupted(self, points):
-        print('BANKRUPTED') if points > self.limiar else False
+        # print('BANKRUPTED') if points > self.limiar else False
         return True if points > self.limiar else False
 
     def get_next_points(self, state, card_index):
@@ -157,10 +157,9 @@ class BlackjackMDP(util.MDP):
                 for card_index in range(0, len(state[2])):
                     new_state = self.get_card(state, card_index)
                     prob = state[2][card_index] / sum(state[2])
-                    
-                    if self.bankrupted(new_state[0]):
-                        reward = 0
-                    else:
+                    reward = 0
+
+                    if (new_state[2] is None) and (not self.bankrupted(new_state[0])):
                         reward = new_state[0]
 
                     possible_states.append((new_state, prob, reward)) if prob > 0 else False
@@ -178,7 +177,10 @@ class BlackjackMDP(util.MDP):
         if action == 'Sair':
             new_state = self.leave_game(state)
             prob = 1
-            reward = state[0]
+            reward = new_state[0]
+            if self.bankrupted(new_state[0]):
+                reward = 0
+
             possible_states.append((new_state, prob, reward))
             
         print(possible_states)
@@ -227,7 +229,7 @@ class ValueIteration(util.MDPAlgorithm):
         V = defaultdict(float)  # state -> value of state
         # Implement the main loop of Asynchronous Value Iteration Here:
         # BEGIN_YOUR_CODE
-        # raise Exception("Not implemented yet")
+        raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
         # Extract the optimal policy now
@@ -249,7 +251,8 @@ def geraMDPxereta():
     """
     # BEGIN_YOUR_CODE
     # raise Exception("Not implemented yet")
-    MDPxereta = BlackjackMDP(valores_cartas=[1, 2, 3, 4, 5], multiplicidade=3, limiar=20, custo_espiada=1)
+    MDPxereta = BlackjackMDP(valores_cartas=[1, 3, 5, 7, 11], multiplicidade=3, limiar=20, custo_espiada=1)
+    return MDPxereta
     # END_YOUR_CODE
 
 
