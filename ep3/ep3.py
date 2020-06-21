@@ -13,7 +13,7 @@
   ENTENDO QUE EPS SEM ASSINATURA NAO SERAO CORRIGIDOS E,
   AINDA ASSIM, PODERAO SER PUNIDOS POR DESONESTIDADE ACADEMICA.
 
-  Nome :
+  Nome : Lucas Roberto da Costa de Santana
   NUSP :
 
   Referencias: Com excecao das rotinas fornecidas no enunciado
@@ -66,6 +66,8 @@ class BlackjackMDP(util.MDP):
               in the deck, or None if the deck is empty or the game is over (e.g. when
               the user quits or goes bust).
         """
+        # start_state = (0, None, (self.multiplicidade,) * len(self.valores_cartas))
+        # print('Start State' + str(start_state))
         return (0, None, (self.multiplicidade,) * len(self.valores_cartas))
 
     def actions(self, state):
@@ -74,6 +76,13 @@ class BlackjackMDP(util.MDP):
         You do not must to modify this function.
         """
         return ['Pegar', 'Espiar', 'Sair']
+
+    def peeked(self, state):
+        """
+        Given a |state| it returns if the player already peeked.
+        """
+        return state[1] is not None
+
 
     def succAndProbReward(self, state, action):
         """
@@ -87,8 +96,38 @@ class BlackjackMDP(util.MDP):
            don't include that state in the list returned by succAndProbReward.
         """
         # BEGIN_YOUR_CODE
-        raise Exception("Not implemented yet")
+        print(state)
+        print(action)
+        state = state
+        action = action
+
+        if self.peeked(state):
+            if action == 'Espiar':
+                return []
+            else: 
+                new_state = (state[0] + self.valores_cartas[state[1]], None, state[1])
+                prob = 1
+                reward = 0
+                return (new_state, prob, reward)
+        else:
+            if action == 'Pegar':
+                card_index = random.randint(0, len(state[2]) - 1)
+                new_state = (state[0] + self.valores_cartas[card_index], None, state[2])
+                prob = 1 / sum(state[2])
+                reward = 0
+            if action == 'Espiar':
+                card_index = random.randint(0, len(state[2]) - 1)
+                new_state = (state[0], card_index, state[2])
+                prob = 1
+                reward = -self.custo_espiada
+            if action == 'Sair':
+                new_state = (state[0], state[1], None)
+                prob = 1
+                reward = state[0]
+            return (new_state, prob, reward)
+        # raise Exception("Not implemented yet")
         # END_YOUR_CODE
+        
 
     def discount(self):
         """
