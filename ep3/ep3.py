@@ -66,8 +66,6 @@ class BlackjackMDP(util.MDP):
               in the deck, or None if the deck is empty or the game is over (e.g. when
               the user quits or goes bust).
         """
-        # start_state = (0, None, (self.multiplicidade,) * len(self.valores_cartas))
-        # print('Start State' + str(start_state))
         return (0, None, (self.multiplicidade,) * len(self.valores_cartas))
 
     def actions(self, state):
@@ -100,31 +98,59 @@ class BlackjackMDP(util.MDP):
         print(action)
         state = state
         action = action
+        possible_states = []
 
         if self.peeked(state):
             if action == 'Espiar':
                 return []
-            else: 
-                new_state = (state[0] + self.valores_cartas[state[1]], None, state[1])
+            else:
+                card_index = state[1] 
+                new_state = (state[0] + self.valores_cartas[card_index], None, state[2])
                 prob = 1
                 reward = 0
-                return (new_state, prob, reward)
+                return [(new_state, prob, reward)]
         else:
             if action == 'Pegar':
-                card_index = random.randint(0, len(state[2]) - 1)
-                new_state = (state[0] + self.valores_cartas[card_index], None, state[2])
-                prob = 1 / sum(state[2])
-                reward = 0
+                for card_index in range(0, len(state[2])):
+                    list_deck = list(state[2])
+                    list_deck[card_index] -= 1
+                    next_deck = tuple(list_deck)
+                    reward = 0
+
+                    next_points = state[0] + self.valores_cartas[card_index]
+
+                    if next_points > self.limiar:
+                        next_deck = None
+                        reward = state[0]
+                    elif sum(next_deck) == 0:
+                        next_deck = None
+                        reward = state[0]
+
+                    new_state = (next_points, None, next_deck)
+                    prob = state[2][card_index] / sum(state[2])
+                    
+                    possible_states.append((new_state, prob, reward))
+                print(possible_states)
+                return possible_states
+
             if action == 'Espiar':
-                card_index = random.randint(0, len(state[2]) - 1)
-                new_state = (state[0], card_index, state[2])
-                prob = 1
-                reward = -self.custo_espiada
+                for card_index in range(0, len(state[2])):
+                #card_index = random.randint(0, len(state[2]) - 1)
+
+                    new_state = (state[0], card_index, state[2])
+                    prob = state[2][card_index] / sum(state[2])
+                    reward = -self.custo_espiada
+
+                    possible_states.append((new_state, prob, reward))
+
+                print(possible_states)
+                return possible_states
+                
             if action == 'Sair':
                 new_state = (state[0], state[1], None)
                 prob = 1
                 reward = state[0]
-            return (new_state, prob, reward)
+                return [(new_state, prob, reward)]
         # raise Exception("Not implemented yet")
         # END_YOUR_CODE
         
