@@ -14,7 +14,7 @@
   AINDA ASSIM, PODERAO SER PUNIDOS POR DESONESTIDADE ACADEMICA.
 
   Nome : Lucas Roberto da Costa de Santana
-  NUSP :
+  NUSP : 11891371
 
   Referencias: Com excecao das rotinas fornecidas no enunciado
   e em sala de aula, caso voce tenha utilizado alguma referencia,
@@ -79,7 +79,7 @@ class BlackjackMDP(util.MDP):
         """
         Given a |state| it returns if the player already peeked.
         """
-        print('PEEKED') if state[1] is not None else 0
+        # print('PEEKED') if state[1] is not None else 0
         return state[1] is not None
     
     def bankrupted(self, points):
@@ -139,52 +139,56 @@ class BlackjackMDP(util.MDP):
            don't include that state in the list returned by succAndProbReward.
         """
         # BEGIN_YOUR_CODE
-        print('START ACTION')
-        print(state)
-        print(action)
+        # print('START ACTION')
+        # print(state)
+        # print(action)
         state = state
         action = action
         possible_states = []
 
-        if action == 'Pegar':
-            if self.peeked(state):
-                card_index = state[1]
-                new_state = self.get_card(state, card_index)
-                prob = 1
-                reward = 0
-                possible_states.append((new_state, prob, reward))
-            else:
-                for card_index in range(0, len(state[2])):
+        if state[2] is None:
+            return possible_states
+
+        else:
+            if action == 'Pegar':
+                if self.peeked(state):
+                    card_index = state[1]
                     new_state = self.get_card(state, card_index)
-                    prob = state[2][card_index] / sum(state[2])
+                    prob = 1
+                    reward = 0
+                    possible_states.append((new_state, prob, reward))
+                else:
+                    for card_index in range(0, len(state[2])):
+                        new_state = self.get_card(state, card_index)
+                        prob = state[2][card_index] / sum(state[2])
+                        reward = 0
+
+                        if (new_state[2] is None) and (not self.bankrupted(new_state[0])):
+                            reward = new_state[0]
+
+                        possible_states.append((new_state, prob, reward)) if prob > 0 else 0
+
+            if action == 'Espiar':
+                if self.peeked(state):
+                    possible_states = []
+                else:
+                    for card_index in range(0, len(state[2])):
+                        new_state = self.peek_card(state, card_index)
+                        prob = state[2][card_index] / sum(state[2])
+                        reward = -self.custo_espiada
+                        possible_states.append((new_state, prob, reward)) if prob > 0 else 0
+
+            if action == 'Sair':
+                new_state = self.leave_game(state)
+                prob = 1
+                reward = new_state[0]
+                if self.bankrupted(new_state[0]):
                     reward = 0
 
-                    if (new_state[2] is None) and (not self.bankrupted(new_state[0])):
-                        reward = new_state[0]
-
-                    possible_states.append((new_state, prob, reward)) if prob > 0 else False
-
-        if action == 'Espiar':
-            if self.peeked(state):
-                possible_states = []
-            else:
-                for card_index in range(0, len(state[2])):
-                    new_state = self.peek_card(state, card_index)
-                    prob = state[2][card_index] / sum(state[2])
-                    reward = -self.custo_espiada
-                    possible_states.append((new_state, prob, reward)) if prob > 0 else False
-
-        if action == 'Sair':
-            new_state = self.leave_game(state)
-            prob = 1
-            reward = new_state[0]
-            if self.bankrupted(new_state[0]):
-                reward = 0
-
-            possible_states.append((new_state, prob, reward))
+                possible_states.append((new_state, prob, reward))
             
-        print(possible_states)
-        print('END ACTION\n')
+        # print(possible_states)
+        # print('END ACTION\n')
         return possible_states    
             
         # END_YOUR_CODE
@@ -205,6 +209,17 @@ class ValueIteration(util.MDPAlgorithm):
         self.pi = {}
         self.V = {}
 
+    def compute_possible_utilities(self, transition):
+        possible_utilities = 0
+
+        for state in transition:
+            prob = state[1]
+            reward = state[2]
+
+            possible_utilities = prob * reward
+            
+        return possible_utilities
+
     def solve(self, mdp, epsilon=0.001):
         """
         Solve the MDP using value iteration.  Your solve() method must set
@@ -214,6 +229,7 @@ class ValueIteration(util.MDPAlgorithm):
         all of the values change by less than epsilon.
         The ValueIteration class is a subclass of util.MDPAlgorithm (see util.py).
         """
+        # print('START SOLVE')
         mdp.computeStates()
         def computeQ(mdp, V, state, action):
             # Return Q(state, action) based on V(state).
@@ -226,10 +242,40 @@ class ValueIteration(util.MDPAlgorithm):
             for state in mdp.states:
                 pi[state] = max((computeQ(mdp, V, state, action), action) for action in mdp.actions(state))[1]
             return pi
-        V = defaultdict(float)  # state -> value of state
+
+
+        V = defaultdict(float)  # state -> value of state 
+        #V = {}
         # Implement the main loop of Asynchronous Value Iteration Here:
         # BEGIN_YOUR_CODE
-        raise Exception("Not implemented yet")
+        #raise Exception("Not implemented yet")
+        gamma = mdp.discount()
+        delta = 10000000
+
+        for state in mdp.states:
+            V[state] = 0
+
+        while delta > (epsilon*(1-gamma)/gamma):
+            
+            #V_1 = {}
+            V_1 = defaultdict(float)
+            # delta = 0
+            
+            #print(mdp.states)
+            for state in mdp.states:
+                if state[2] is None:
+                    V_1[state] = 0
+                else:
+                    V_1[state] = max(computeQ(mdp, V, state, action) for action in mdp.actions(state))
+                    #print(f'Q {V_1[state]}')
+                
+            if max(abs(V[state] - V_1[state])  for state in mdp.states ) < epsilon:
+                break
+            else:
+                delta = max(abs(V[state] - V_1[state])  for state in mdp.states )
+
+            V = V_1
+        
         # END_YOUR_CODE
 
         # Extract the optimal policy now
@@ -251,7 +297,7 @@ def geraMDPxereta():
     """
     # BEGIN_YOUR_CODE
     # raise Exception("Not implemented yet")
-    MDPxereta = BlackjackMDP(valores_cartas=[1, 3, 5, 7, 11], multiplicidade=3, limiar=20, custo_espiada=1)
+    MDPxereta = BlackjackMDP(valores_cartas=[1, 5, 11], multiplicidade=4, limiar=20, custo_espiada=1)
     return MDPxereta
     # END_YOUR_CODE
 
@@ -312,7 +358,11 @@ class QLearningAlgorithm(util.RLAlgorithm):
          HINT: Remember to check if s is a terminal state and s' None.
         """
         # BEGIN_YOUR_CODE
-        raise Exception("Not implemented yet")
+        for feature in blackjackFeatureExtractor(state, action):
+            self.weights[feature[0]] = feature[1]
+
+        return self.weights
+        #raise Exception("Not implemented yet")
         # END_YOUR_CODE
 
 def identityFeatureExtractor(state, action):
@@ -337,5 +387,13 @@ def blackjackFeatureExtractor(state, action):
     (See identityFeatureExtractor() above for a simple example.)
     """
     # BEGIN_YOUR_CODE
-    raise Exception("Not implemented yet")
+    # raise Exception("Not implemented yet")
+    # Features
+    # 1 - (pontos_na_mao, int)
+    # 2 - (n_cartas_restantes, int)
+    features = []
+    features.append(('points', state[0]))
+    features.append(('cards_left', sum(state[2])))
+
+    return features
     # END_YOUR_CODE

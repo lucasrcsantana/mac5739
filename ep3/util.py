@@ -5,7 +5,7 @@ class MDPAlgorithm:
     # Set:
     # - self.pi: optimal policy (mapping from state to action)
     # - self.V: values (mapping from state to best values)
-    def solve(self, mdp): raise NotImplementedError("Override me")
+    def solve(self, mdp, epsilon): raise NotImplementedError("Override me")
 
 ############################################################
 
