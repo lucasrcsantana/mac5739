@@ -10834,3 +10834,681 @@ Python error: 'int' object is not subscriptable
 Test did not conclude
 Receiving grade 0.0 in the test
 Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.12/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	47
+refactor:	7
+warning:	5
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	14
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.17/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	47
+refactor:	7
+warning:	5
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	14
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.22/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	47
+refactor:	7
+warning:	5
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	14
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.27/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	47
+refactor:	7
+warning:	3
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	14
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.21/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	48
+refactor:	7
+warning:	3
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	15
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.34/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	46
+refactor:	7
+warning:	3
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	13
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.16/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	46
+refactor:	7
+warning:	5
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	13
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.23/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	46
+refactor:	7
+warning:	5
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	13
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.25/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	45
+refactor:	7
+warning:	5
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	12
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Your code does not even import!
+------------------------------
+Unable to perform any check or test
+Grades are:
+Test01-01: 0.0
+Test01-02: 0.0
+Test02: 0.0
+Test03: 0.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.14/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	46
+refactor:	7
+warning:	6
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	12
+line-too-long:	5
+bad-whitespace:	2
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	3
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Your code does not even import!
+------------------------------
+Unable to perform any check or test
+Grades are:
+Test01-01: 0.0
+Test01-02: 0.0
+Test02: 0.0
+Test03: 0.0
+******************************
+Your code does not even import!
+------------------------------
+Unable to perform any check or test
+Grades are:
+Test01-01: 0.0
+Test01-02: 0.0
+Test02: 0.0
+Test03: 0.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.12/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	46
+refactor:	7
+warning:	6
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	12
+line-too-long:	5
+bad-whitespace:	2
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	3
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+Python error: 'float' object is not iterable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test02-01: 0.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Python error: 'int' object is not iterable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.12/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	46
+refactor:	7
+warning:	6
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	12
+line-too-long:	5
+bad-whitespace:	2
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	3
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+Python error: 'float' object is not iterable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test02-01: 0.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Python error: 'int' object is not iterable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0
+******************************
+Code quality:
+------------------------------
+Code grade: 6.23/10.0	(Code with reasonably quality)
+------------------------------
+Standards deviation:
+statement:	0
+info:	0
+convention:	45
+refactor:	7
+warning:	5
+error:	0
+fatal:	0
+------------------------------
+Deviation description:
+trailing-whitespace:	12
+line-too-long:	5
+bad-whitespace:	1
+no-self-use:	4
+missing-docstring:	2
+simplifiable-if-expression:	1
+no-else-return:	1
+expression-not-assigned:	2
+too-many-branches:	1
+invalid-name:	25
+unused-variable:	2
+unused-argument:	1
+******************************
+Tests:
+------------------------------
+Parte01-01 Modeling MDPs:
+Modeling MDPs:	2/2 correct
+Test concluded without errors
+Grade in the Test01: 10.0/10.0
+------------------------------
+Part02-01 ValueIteration::
+ValueIteration:	1/1 correct
+Test concluded without errors
+Grade in the Test02-01: 10.0/10.0
+------------------------------
+Part02-02 Peeking MDP:
+Peeking MDP:	0/1 correct
+Test concluded without errors
+Grade in the Test02-02: 0.0/10.0
+------------------------------
+Part03-01 QLearningAlgorithm:
+Python error: 'int' object is not subscriptable
+Test did not conclude
+Receiving grade 0.0 in the test
+Grade in the Test03-01: 0.0/10.0

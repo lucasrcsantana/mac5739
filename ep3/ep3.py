@@ -139,9 +139,6 @@ class BlackjackMDP(util.MDP):
            don't include that state in the list returned by succAndProbReward.
         """
         # BEGIN_YOUR_CODE
-        # print('START ACTION')
-        # print(state)
-        # print(action)
         state = state
         action = action
         possible_states = []
@@ -244,8 +241,8 @@ class ValueIteration(util.MDPAlgorithm):
             return pi
 
 
-        V = defaultdict(float)  # state -> value of state 
-        #V = {}
+        # V = defaultdict(float)  # state -> value of state 
+        V = {}
         # Implement the main loop of Asynchronous Value Iteration Here:
         # BEGIN_YOUR_CODE
         #raise Exception("Not implemented yet")
@@ -255,24 +252,16 @@ class ValueIteration(util.MDPAlgorithm):
         for state in mdp.states:
             V[state] = 0
 
-        while delta > (epsilon*(1-gamma)/gamma):
-            
-            #V_1 = {}
-            V_1 = defaultdict(float)
-            # delta = 0
-            
-            #print(mdp.states)
+        while True:
+            V_1 = {}
             for state in mdp.states:
                 if state[2] is None:
                     V_1[state] = 0
                 else:
                     V_1[state] = max(computeQ(mdp, V, state, action) for action in mdp.actions(state))
-                    #print(f'Q {V_1[state]}')
-                
+                     
             if max(abs(V[state] - V_1[state])  for state in mdp.states ) < epsilon:
                 break
-            else:
-                delta = max(abs(V[state] - V_1[state])  for state in mdp.states )
 
             V = V_1
         
